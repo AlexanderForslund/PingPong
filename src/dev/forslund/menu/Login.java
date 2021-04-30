@@ -4,6 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.util.Scanner;
 
 public class Login extends JFrame {
 
@@ -138,6 +142,15 @@ public class Login extends JFrame {
     }
 
     private void Register() {
+        File loginFile = new File("login.txt");
 
+        FileOutputStream fileOutput;
+        Scanner s;
+        try {
+            fileOutput = new FileOutputStream(loginFile, true);
+            s = new Scanner(loginFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
