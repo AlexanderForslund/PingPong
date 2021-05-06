@@ -135,10 +135,11 @@ public class Login extends JFrame {
 
         setPreferredSize(new Dimension(300, 200));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
         setResizable(false);
         pack();
         setVisible(true);
+        setLocationRelativeTo(null);
+
     }
 
     private void Register() {
