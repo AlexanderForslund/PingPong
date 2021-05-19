@@ -17,7 +17,11 @@ public class GamePanel extends JPanel {
     private Player localPlayer;
     private Player opponentPlayer;
 
-    public GamePanel() {
+    private PongGame game;
+
+    public GamePanel(PongGame game) {
+        this.game = game;
+
         setBackground(Color.BLACK);
         setFocusable(true);
 
@@ -47,6 +51,10 @@ public class GamePanel extends JPanel {
         drawGame(g);
     }
 
+    public Ball getBall() {
+        return ball;
+    }
+
     // Game Logic
     private void drawGame(Graphics g) {
         ball.draw(g);
@@ -55,18 +63,30 @@ public class GamePanel extends JPanel {
     }
 
     private void move(char inputChar) {
-        System.out.println(inputChar);
-        // TODO: Send information about movement to server
         if (inputChar == 'w') {
             if (!(localPlayer.getY()-10 <= 0)) {
                 localPlayer.setY(localPlayer.getY()-10);
+                game.sendMoveData(localPlayer.getY());
             }
         } else if (inputChar == 's') {
             if (!(localPlayer.getY()+10 > (getHeight()-PLAYER_HEIGHT))) {
                 localPlayer.setY(localPlayer.getY()+10);
+                game.sendMoveData(localPlayer.getY());
             }
         }
 
         repaint();
     }
+
+    public void moveOpponent(int coordinates) {
+        opponentPlayer.setY(coordinates);
+    }
+    public void moveBall(int x, int y) {
+        if (ball != null) {
+            ball.setX(x);
+            ball.setY(y);
+        }
+    }
+
+
 }
