@@ -14,16 +14,16 @@ import java.net.SocketException;
 import java.util.ArrayList;
 
 public class Server extends JFrame {
-    private int GAME_LOOP_INTERVAL = 100; // ms
+    private final int GAME_LOOP_INTERVAL = 17; // ms, 8 = 120hz, 17 = 60hz ish
 
-    private ServerSocket listeningSocket;
-    private ArrayList<User> userList;
-    private Server server;
+    private final ServerSocket listeningSocket;
+    private final ArrayList<User> userList;
+    private final Server server;
 
-    private JLabel currentServerInfo = new JLabel();
+    private final JLabel currentServerInfo = new JLabel();
     private static JLabel currentConnections;
 
-    private GameThread gameThread;
+    private final GameThread gameThread;
 
     private int id;
 
@@ -113,5 +113,11 @@ public class Server extends JFrame {
 
     public static void updateUserCount() {
         currentConnections.setText("Current Connections: " + ClientManager.clientManagerCount());
+    }
+
+    public void sendPointUpdate(int winnerID) {
+        for (User u : userList) {
+            u.getClientManager().sendPointUpdate(winnerID);
+        }
     }
 }

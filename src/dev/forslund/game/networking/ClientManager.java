@@ -8,12 +8,12 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class ClientManager implements Runnable {
-    private Thread t = new Thread(this);
+    private final Thread t = new Thread(this);
     private DataInputStream in;
     private DataOutputStream out;
-    private Server server;
+    private final Server server;
 
-    private int id;
+    private final int id;
 
     private static int clientManagerCount;
 
@@ -70,6 +70,14 @@ public class ClientManager implements Runnable {
             out.writeUTF("b." + x + "," + y);
         } catch (IOException e) {
             System.out.println("No opponent.");
+        }
+    }
+
+    public void sendPointUpdate(int winnerID) {
+        try {
+            out.writeUTF("w." + winnerID);
+        } catch (IOException e) {
+            System.out.println("No connection.");
         }
     }
 

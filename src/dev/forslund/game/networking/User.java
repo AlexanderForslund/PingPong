@@ -1,7 +1,7 @@
 package dev.forslund.game.networking;
 
 public class User {
-    private ClientManager clientManager;
+    private final ClientManager clientManager;
     private int yCoordinate;
 
     public User(ClientManager clientManager) {

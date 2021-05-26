@@ -2,11 +2,14 @@ package dev.forslund.game;
 
 import dev.forslund.game.shapes.Ball;
 import dev.forslund.game.shapes.Player;
+import dev.forslund.game.shapes.Rectangle;
+import org.w3c.dom.css.Rect;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 public class GamePanel extends JPanel {
     private final int PLAYER_HEIGHT = 75; // Default 75
@@ -16,8 +19,9 @@ public class GamePanel extends JPanel {
     private Ball ball;
     private Player localPlayer;
     private Player opponentPlayer;
+    private ArrayList<Rectangle> divisor;
 
-    private PongGame game;
+    private final PongGame game;
 
     public GamePanel(PongGame game) {
         this.game = game;
@@ -38,9 +42,17 @@ public class GamePanel extends JPanel {
     // Initiate Assets
     public void initiateAssets() {
         // Create assets
-        ball = new Ball(getWidth()/2, 20, BALL_SIZE);
+        ball = new Ball(getWidth()/2, 1000, BALL_SIZE);
         localPlayer = new Player(10, 50, 20, PLAYER_HEIGHT);
         opponentPlayer = new Player(getWidth()-(10+20), 50, 20, PLAYER_HEIGHT);
+
+        divisor = new ArrayList<>();
+        for (int i = getHeight()/10; i > 0; i--) {
+            if (i % 2 != 0) {
+                divisor.add(new Rectangle((getWidth()/2) - 10, (i*10), 10, 10));
+            }
+        }
+
         repaint();
     }
 
@@ -57,6 +69,10 @@ public class GamePanel extends JPanel {
 
     // Game Logic
     private void drawGame(Graphics g) {
+        for (Rectangle r : divisor) {
+            r.draw(g);
+        }
+
         ball.draw(g);
         localPlayer.draw(g);
         opponentPlayer.draw(g);

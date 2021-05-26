@@ -6,6 +6,7 @@ import dev.forslund.game.networking.Server;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.net.SocketException;
 
 public class Lobby extends JFrame {
@@ -60,6 +61,7 @@ public class Lobby extends JFrame {
         c.weightx = 2;
         c.weighty = 1;
         add(txfConnectIP, c);
+        txfConnectIP.setText("localhost");
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridwidth = 1;
@@ -68,6 +70,7 @@ public class Lobby extends JFrame {
         c.weightx = 2;
         c.weighty = 1;
         add(txfConnectPort, c);
+        txfConnectPort.setText("5000");
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridwidth = 2;
@@ -93,15 +96,37 @@ public class Lobby extends JFrame {
             }
             try {
                 new PongGame("localhost", 5000);
+                dispose();
             } catch (GameFullException gameFullException) {
                 JOptionPane.showMessageDialog(null, "Server is full.");
-                new Lobby(username);
+            } catch (IOException ioException) {
+                System.out.println("Should never get here, this is due to server not existing. This creates server first.");
             }
-            dispose();
+        });
+
+        btnConnect.addActionListener(e -> {
+            String address = txfConnectIP.getText();
+            int port = 5000;
+
+            try {
+                port = Integer.parseInt(txfConnectPort.getText());
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Invalid port.");
+                return;
+            }
+
+            try {
+                new PongGame(address, port);
+                dispose();
+            } catch (GameFullException gameFullException) {
+                JOptionPane.showMessageDialog(null, "Server is full.");
+            } catch (IOException ioex) {
+                JOptionPane.showMessageDialog(null, "Connection Refused.\nPlease verify that IP and Port are correct.");
+            }
         });
 
         setPreferredSize(new Dimension(250, 175));
-        setDefaultCloseOperation(EXIT_ON_CLOSE); // TODO: Don't exit whole program.
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
         pack();
         setVisible(true);
