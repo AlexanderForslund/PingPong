@@ -30,6 +30,10 @@ public class Server extends JFrame {
     public Server(int port) throws HeadlessException, SocketException {
         super("Server Console");
 
+        // TODO Some thread keeps running after server window is closed
+        // IDK if this is going to be fixed because it is effort
+        // It dies when both clients disconnects anyways so shouldn't be a prob
+
         server = this;
 
         try {
@@ -59,8 +63,12 @@ public class Server extends JFrame {
                 try {
                     listeningSocket.close();
                 } catch (IOException ioException) {
-                    System.out.println("Got here");
                     ioException.printStackTrace();
+                }
+
+                gameThread.interrupt();
+                for (User u : userList) {
+                    u.getClientManager().getThread().interrupt();
                 }
                 dispose();
             }
@@ -86,7 +94,6 @@ public class Server extends JFrame {
                         }
                     } catch(IOException ioe) {
                         System.out.println("Socket Closed.");
-                        // TODO: add end process functionality (Stop threads)
                         break;
                     } catch (GameFullException e) {
                         e.printStackTrace();
@@ -96,6 +103,11 @@ public class Server extends JFrame {
         }.start();
     }
 
+    /**
+     * Sends player position to client managers.
+     * @param senderID Sender ID.
+     * @param coordinates Coordinates.
+     */
     public void sendPlayerPosition(int senderID, int coordinates) {
         for (User u : userList) {
             if (u.getClientManager().getId() != senderID) {
@@ -105,16 +117,28 @@ public class Server extends JFrame {
         }
     }
 
+    /**
+     * Send ball position to client managers.
+     * @param x X-Coordinate.
+     * @param y Y-Coordinate.
+     */
     public void sendBallPosition(int x, int y) {
         for (User u : userList) {
             u.getClientManager().sendBallCoordinates(x, y);
         }
     }
 
+    /**
+     * Updates server panel user count.
+     */
     public static void updateUserCount() {
         currentConnections.setText("Current Connections: " + ClientManager.clientManagerCount());
     }
 
+    /**
+     * Send point update to client managers.
+     * @param winnerID Winner ID.
+     */
     public void sendPointUpdate(int winnerID) {
         for (User u : userList) {
             u.getClientManager().sendPointUpdate(winnerID);

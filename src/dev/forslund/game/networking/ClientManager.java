@@ -38,6 +38,9 @@ public class ClientManager implements Runnable {
         t.start();
     }
 
+    /**
+     * Main thread for receiving and sending info from client.
+     */
     @Override
     public void run() {
         while(true) {
@@ -57,6 +60,10 @@ public class ClientManager implements Runnable {
         }
     }
 
+    /**
+     * Send player coordinates to the client. Suffix "p" for player.
+     * @param coords Provided coordinates.
+     */
     public void sendPlayerCoordinates(int coords) {
         try {
             out.writeUTF("p." + coords);
@@ -65,6 +72,11 @@ public class ClientManager implements Runnable {
         }
     }
 
+    /**
+     * Send ball coordinates to the client. Suffix "b" for ball.
+     * @param x X-Coordinate.
+     * @param y Y-Coordinate.
+     */
     public void sendBallCoordinates(int x, int y) {
         try {
             out.writeUTF("b." + x + "," + y);
@@ -73,6 +85,10 @@ public class ClientManager implements Runnable {
         }
     }
 
+    /**
+     * Send point update to the client. Suffix "w" for win.
+     * @param winnerID The ID of the winning player.
+     */
     public void sendPointUpdate(int winnerID) {
         try {
             out.writeUTF("w." + winnerID);
@@ -81,11 +97,19 @@ public class ClientManager implements Runnable {
         }
     }
 
+    /**
+     * Client manager amount.
+     * @return get client manager amount.
+     */
     public static int clientManagerCount() {
         return clientManagerCount;
     }
 
     public int getId() {
         return id;
+    }
+
+    public Thread getThread() {
+        return t;
     }
 }

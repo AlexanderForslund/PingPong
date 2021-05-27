@@ -40,6 +40,10 @@ public class GameThread extends Thread {
     }
 
     // Very bad code, everythingh is hardcoded
+
+    /**
+     * Game loop.
+     */
     @Override
     public void run() {
         int lastBounceID = 0;
@@ -49,6 +53,7 @@ public class GameThread extends Thread {
                 sleep(interval);
             } catch (InterruptedException e) {
                 System.out.println("Interrupted sleep.");
+                break;
             }
 
             if ((lastBounceID == 1 && x <= 200) || (lastBounceID == 0 && x >= 7300)) {
@@ -60,7 +65,7 @@ public class GameThread extends Thread {
             // Y-Bounce
             if (y >= (600 - (BALL_RADIUS*2)) || y <= 0) { // height - ball radius * 2, effort to remove hardcode
                 Random r = new Random();
-                incrementY = (incrementY / Math.abs(incrementY)) * -1; // TODO: Fix infinite bounce.
+                incrementY = (incrementY / Math.abs(incrementY)) * -1;
                 incrementY = (Math.abs(incrementX)/(9 - r.nextInt(3))) * incrementY; // Sheesh all this for randomized Y-speed.
 
                 // It is probably broken by it not incrementing enough when bouncing back before the next attempt.
@@ -92,6 +97,9 @@ public class GameThread extends Thread {
         }
     }
 
+    /**
+     * Resets the game.
+     */
     public void reset() {
         x = BALL_SPAWN_X;
         y = BALL_SPAWN_Y;

@@ -39,6 +39,9 @@ public class GamePanel extends JPanel {
         });
     }
 
+    /**
+     * Initiates game visual assets.
+     */
     // Initiate Assets
     public void initiateAssets() {
         // Create assets
@@ -68,6 +71,11 @@ public class GamePanel extends JPanel {
     }
 
     // Game Logic
+
+    /**
+     * Draws game
+     * @param g Graphics g.
+     */
     private void drawGame(Graphics g) {
         for (Rectangle r : divisor) {
             r.draw(g);
@@ -78,6 +86,10 @@ public class GamePanel extends JPanel {
         opponentPlayer.draw(g);
     }
 
+    /**
+     * Move character.
+     * @param inputChar Input character from keyboard.
+     */
     private void move(char inputChar) {
         if (inputChar == 'w') {
             if (!(localPlayer.getY()-10 <= 0)) {
@@ -94,9 +106,19 @@ public class GamePanel extends JPanel {
         repaint();
     }
 
+    /**
+     * MOve other player.
+     * @param coordinates Opponent coordinates.
+     */
     public void moveOpponent(int coordinates) {
         opponentPlayer.setY(coordinates);
     }
+
+    /**
+     * Moves ball
+     * @param x X-coordinate.
+     * @param y Y-coordinate.
+     */
     public void moveBall(int x, int y) {
         if (ball != null) {
             ball.setX(x);

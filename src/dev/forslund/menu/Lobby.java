@@ -6,8 +6,10 @@ import dev.forslund.game.networking.Server;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
+import java.io.*;
 import java.net.SocketException;
+import java.util.Scanner;
+
 
 public class Lobby extends JFrame {
     private final String username;
@@ -61,7 +63,7 @@ public class Lobby extends JFrame {
         c.weightx = 2;
         c.weighty = 1;
         add(txfConnectIP, c);
-        txfConnectIP.setText("localhost");
+        txfConnectIP.setText(readLastIP());
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridwidth = 1;
@@ -117,6 +119,7 @@ public class Lobby extends JFrame {
 
             try {
                 new PongGame(address, port);
+                writeLastIP(address);
                 dispose();
             } catch (GameFullException gameFullException) {
                 JOptionPane.showMessageDialog(null, "Server is full.");
@@ -131,5 +134,38 @@ public class Lobby extends JFrame {
         pack();
         setVisible(true);
         setLocationRelativeTo(null);
+    }
+
+    /**
+     * Writes ip to file. Use readLastIP() to read last ip.
+     * @param address Address that is to be written.
+     */
+    public void writeLastIP(String address) {
+        try {
+            FileWriter file = new FileWriter("saved_ip.txt");
+            System.out.println("Write file lol");
+            file.write(address);
+            file.close();
+        } catch (IOException e) {
+            System.out.println("Error some reason lol");
+        }
+    }
+
+    /**
+     * Reads last ip written to file "saved_ip.txt".
+     * Defaults to "localhost" if no file is found.
+     * @return Returns saved IP, defaults to "localhost".
+     */
+    public String readLastIP() {
+        String str = "localhost";
+
+        try {
+            Scanner s = new Scanner(new File("saved_ip.txt"));
+            str = s.nextLine();
+        } catch (FileNotFoundException e) {
+            System.out.println("File could not be found");
+        }
+
+        return str;
     }
 }

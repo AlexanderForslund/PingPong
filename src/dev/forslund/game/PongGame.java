@@ -91,6 +91,11 @@ public class PongGame extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    /**
+     * Attempts to connect to server. Throws several exceptions due to different issues.
+     * @throws GameFullException Thrown if game is full.
+     * @throws IOException Thrown if cannot connect or other networking error.
+     */
     private void connectToServer() throws GameFullException, IOException {
         // Connect to server
         try {
@@ -108,6 +113,9 @@ public class PongGame extends JFrame {
         }
     }
 
+    /**
+     * Client game loop. Waits for info from the server.
+     */
     private void getGameData() {
         new Thread() {
             public void run() {
@@ -151,6 +159,11 @@ public class PongGame extends JFrame {
     }
 
     // Package functions
+
+    /**
+     * Sends move data when moving.
+     * @param a Coordinate.
+     */
     protected void sendMoveData(int a) {
         try {
             out.writeUTF(networkID + "." + a);
